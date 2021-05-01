@@ -1,6 +1,8 @@
 const path = require('path')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 
+console.log('process.env.NODE_ENV', process.env.NODE_ENV)
+process.env.PUBLIC_URL = './hey'
 module.exports = {
   entry: './src/index.tsx',
   output: {
@@ -13,7 +15,7 @@ module.exports = {
     open: true,
     contentBase: path.resolve('./build'),
     index: 'index.html',
-    port: 3000,
+    port: 5000,
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.css', '.scss', '.json'],
@@ -21,7 +23,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.scss$/i,
+        test: /\.(css|scss)$/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {

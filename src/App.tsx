@@ -1,9 +1,11 @@
 import React from 'react'
+import Wrap from './components/Wrap'
+
 const App = () => {
   React.useEffect(() => {}, [])
   return (
     <div id="main">
-      <header>Hello World</header>
+      <Wrap />
     </div>
   )
 }

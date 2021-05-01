@@ -1,6 +1,3 @@
-# Dummy Generator (JSON TYPE)
+# Dummy Generator
 
-```
-npm install
-npm start
-```
+not yet
