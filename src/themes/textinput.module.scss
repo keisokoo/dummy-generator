@@ -6,21 +6,20 @@
   padding: 0;
   box-sizing: border-box;
   border: 1px solid #d1d4db;
-  border-radius: 2px;
+  border-radius: 0.2em;
   background: #fff;
-  height: 32px;
+  height: 2.4em;
   display: inline-flex;
   flex-direction: row;
   align-items: stretch;
   position: relative;
-  border-radius: 10px;
   input {
     -webkit-font-smoothing: antialiased;
-    font-size: 14px;
+    font-size: 1em;
     font-weight: 400;
     box-shadow: none;
     margin: 0;
-    padding: 0 8px;
+    padding: 0 0.8em;
     box-sizing: border-box;
     border-radius: 0;
     border: none;

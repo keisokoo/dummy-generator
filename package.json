@@ -10,6 +10,7 @@
   "author": "keisokoo",
   "license": "ISC",
   "dependencies": {
+    "date-fns": "^2.21.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
@@ -29,10 +30,12 @@
     "file-loader": "^6.2.0",
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.1",
+    "mini-css-extract-plugin": "^1.6.0",
     "normalize.css": "^8.0.1",
     "prettier": "^2.2.1",
     "sass": "^1.32.12",
     "sass-loader": "^11.0.1",
+    "source-map-loader": "^2.0.1",
     "style-loader": "^2.0.0",
     "ts-loader": "^9.1.1",
     "typescript": "^4.2.4",

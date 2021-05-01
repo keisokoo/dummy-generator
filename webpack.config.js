@@ -1,8 +1,10 @@
 const path = require('path')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
-console.log('process.env.NODE_ENV', process.env.NODE_ENV)
-process.env.PUBLIC_URL = './hey'
+const mode = process.env.NODE_ENV || 'development'
+const dev = mode === 'development' ? true : false
+
 module.exports = {
   entry: './src/index.tsx',
   output: {
@@ -24,7 +26,11 @@ module.exports = {
     rules: [
       {
         test: /\.(css|scss)$/,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        use: [
+          dev ? 'style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader',
+        ],
       },
       {
         test: /\.(js|jsx)$/,
@@ -50,6 +56,11 @@ module.exports = {
         test: /\.(jpg|jpeg|png|gif|mp3|svg)$/,
         use: ['file-loader'],
       },
+      {
+        test: /\.js$/,
+        enforce: 'pre',
+        loader: 'source-map-loader',
+      },
     ],
   },
   plugins: [
@@ -57,6 +68,7 @@ module.exports = {
       template: './public/index.html',
       filename: 'index.html',
     }),
+    new MiniCssExtractPlugin(),
   ],
   mode: 'development',
 }
