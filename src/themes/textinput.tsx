@@ -8,6 +8,7 @@ const TextInput = ({
   onValueChange,
   defaultValue,
   onKeyDown,
+  inputType,
 }: TextInputType.Props) => {
   const [value, setValue] = useState('' as string | undefined)
   const handleChangeValue = (event: ChangeEvent<HTMLInputElement>) => {
@@ -17,20 +18,21 @@ const TextInput = ({
     }
   }
   useEffect(() => {
-    setValue(defaultValue)
-    if (defaultValue === '') {
+    if (defaultValue !== undefined) {
+      setValue(defaultValue)
+    }
+    if (refs && refs.current && defaultValue === '') {
       refs.current.focus()
     }
   }, [defaultValue, refs])
   return (
     <div className={`${styles.wrap}`}>
       <input
-        data-id={index}
-        ref={refs}
-        type="text"
+        {...(refs && { ref: refs })}
+        type={inputType ? inputType : `text`}
         value={value}
         onChange={handleChangeValue}
-        onKeyDown={(e) => onKeyDown(e, index)}
+        {...(onKeyDown && { onKeyDown: (e) => onKeyDown(e, index) })}
       />
     </div>
   )

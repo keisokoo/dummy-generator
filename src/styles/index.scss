@@ -39,3 +39,37 @@ body {
 code {
   white-space: pre-wrap;
 }
+#wrap {
+  width: 100%;
+  & > div {
+    position: absolute;
+    width: 50%;
+    min-height: 100%;
+    top: 0;
+    display: flex;
+    &.key-part {
+      left: 0;
+      justify-content: center;
+      align-items: center;
+    }
+    &.value-part {
+      position: fixed;
+      overflow: auto;
+      height: 100%;
+      right: 0;
+      justify-content: flex-start;
+      align-items: flex-start;
+      background-color: #ffffff;
+      padding: 2em;
+      box-sizing: border-box;
+      border-left: 1px solid #c3c3c3;
+    }
+  }
+}
+select,
+button {
+  height: 2.4em;
+}
+.key-value-box {
+  padding: 4px 0;
+}

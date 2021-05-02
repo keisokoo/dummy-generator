@@ -4,7 +4,8 @@ declare module 'custom-types' {
       name: string
       valueType: string
       refs: React.MutableRefObject | undefined | null
-      custom?: string
+      custom: string
+      wrapType: boolean
     }
   }
   export namespace TextInputType {
@@ -15,6 +16,7 @@ declare module 'custom-types' {
       defaultValue?: string | undefined
       onValueChange?: (value: string) => void
       onKeyDown?: KeyboardEventHandler<HTMLInputElement> | undefined
+      inputType?: string
     }
   }
 }
