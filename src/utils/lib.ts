@@ -10,14 +10,14 @@ import {
   articles,
 } from './data'
 
-export function randomRange(arr) {
+export function randomRange(arr: Array<any>) {
   return arr[Math.floor(Math.random() * arr.length)]
 }
 function gcr() {
   var r = Math.floor(Math.random() * 26)
   return String.fromCharCode(65 + r)
 }
-export function randomDate(start, end) {
+export function randomDate(start: Date, end: Date) {
   return new Date(
     start.getTime() + Math.random() * (end.getTime() - start.getTime())
   )
