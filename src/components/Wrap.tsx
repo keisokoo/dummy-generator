@@ -11,7 +11,7 @@ import {
   randomArticle,
   randomRange,
 } from '../utils/lib'
-import { format } from 'date-fns'
+// import { format } from 'date-fns'
 
 const initialKeyValue = [
   {
@@ -47,7 +47,7 @@ const initialKeyValue = [
     valueType: 'date',
     refs: createRef(),
     custom: '',
-    wrapType: true,
+    wrapType: false,
   },
   {
     name: 'title',
@@ -267,47 +267,51 @@ const Wrap = () => {
                 const {valueName} = {manys.length > 1 ? <>[{'\n'}</> : ''}
               </>
             )}
-            {manys.map((_, manyIndex) => (
-              <React.Fragment key={`code-${manyIndex}`}>
-                {'{'}
-                {keyValues &&
-                  keyValues.length > 0 &&
-                  keyValues.map((item, index) => (
-                    <React.Fragment key={`code-${index}`}>
-                      {'\n'}
-                      {`    "${item.name}": ${item.wrapType ? `"` : ``}${
-                        item.valueType === 'name' ? randomName() : ''
-                      }${item.valueType === 'phone' ? randomNumber() : ''}${
-                        item.valueType === 'split'
-                          ? item.custom?.includes('|')
-                            ? randomRange(item.custom.split('|'))
-                            : item.custom
-                          : ''
-                      }${item.valueType === 'address' ? randomAddress() : ''}${
-                        item.valueType === 'email' ? randomMail() : ''
-                      }${
-                        item.valueType === 'date'
-                          ? format(
-                              randomDate(new Date(2012, 0, 1), new Date()),
-                              'yyyy-MM-dd'
-                            )
-                          : ''
-                      }${item.valueType === 'title' ? randomTitle() : ''}${
-                        item.valueType === 'article' ? randomArticle() : ''
-                      }${item.valueType === 'custom' ? item.custom : ''}${
-                        item.wrapType ? `"` : ``
-                      },`}
-                    </React.Fragment>
-                  ))}
-                {'\n'}
-                {'}'}
-                {manys.length > 1 && manys.length - 1 !== manyIndex ? (
-                  <>,{'\n'}</>
-                ) : (
-                  ''
-                )}
-              </React.Fragment>
-            ))}
+            {manys.map((_, manyIndex) => {
+              return(
+                <React.Fragment key={`code-${manyIndex}`}>
+                  {'{'}
+                  {keyValues &&
+                    keyValues.length > 0 &&
+                    keyValues.map((item, index) => {
+                      if(item.valueType === 'date'){
+                        item.wrapType = false
+                      }
+                      return(
+                        <React.Fragment key={`code-${index}`}>
+                          {'\n'}
+                          {`    "${item.name}": ${item.wrapType ? `"` : ``}${
+                            item.valueType === 'name' ? randomName() : ''
+                          }${item.valueType === 'phone' ? randomNumber() : ''}${
+                            item.valueType === 'split'
+                              ? item.custom?.includes('|')
+                                ? randomRange(item.custom.split('|'))
+                                : item.custom
+                              : ''
+                          }${item.valueType === 'address' ? randomAddress() : ''}${
+                            item.valueType === 'email' ? randomMail() : ''
+                          }${
+                            item.valueType === 'date'
+                              ? randomDate(new Date(2012, 0, 1), new Date()).getTime()
+                              : ''
+                          }${item.valueType === 'title' ? randomTitle() : ''}${
+                            item.valueType === 'article' ? randomArticle() : ''
+                          }${item.valueType === 'custom' ? item.custom : ''}${
+                            item.wrapType ? `"` : ``
+                          },`}
+                        </React.Fragment>
+                      )
+                    })}
+                  {'\n'}
+                  {'}'}
+                  {manys.length > 1 && manys.length - 1 !== manyIndex ? (
+                    <>,{'\n'}</>
+                  ) : (
+                    ''
+                  )}
+                </React.Fragment>
+              )
+            })}
             {manys.length > 1 ? <>]{'\n'}</> : ''}
           </code>
         </div>
