@@ -10,87 +10,105 @@ import {
   randomTitle,
   randomArticle,
   randomRange,
+  randomCode,
+  randomBrands,
+  randomProducts,
 } from '../utils/lib'
 // import { format } from 'date-fns'
+import { v4 as uuidv4 } from 'uuid'
 
 const initialKeyValue = [
   {
-    name: 'name',
-    valueType: 'name',
+    name: 'id',
+    valueType: 'id',
     refs: createRef(),
     custom: '',
     wrapType: true,
   },
   {
-    name: 'phone',
-    valueType: 'phone',
+    name: 'code',
+    valueType: 'code',
     refs: createRef(),
     custom: '',
     wrapType: true,
   },
-  {
-    name: 'address',
-    valueType: 'address',
-    refs: createRef(),
-    custom: '',
-    wrapType: true,
-  },
-  {
-    name: 'email',
-    valueType: 'email',
-    refs: createRef(),
-    custom: '',
-    wrapType: true,
-  },
-  {
-    name: 'date',
-    valueType: 'date',
-    refs: createRef(),
-    custom: '',
-    wrapType: false,
-  },
-  {
-    name: 'title',
-    valueType: 'title',
-    refs: createRef(),
-    custom: '',
-    wrapType: true,
-  },
-  {
-    name: 'article',
-    valueType: 'article',
-    refs: createRef(),
-    custom: '',
-    wrapType: true,
-  },
-  {
-    name: 'custom',
-    valueType: 'custom',
-    refs: createRef(),
-    custom: 'customer',
-    wrapType: true,
-  },
-  {
-    name: 'json',
-    valueType: 'custom',
-    refs: createRef(),
-    custom: "['a','b','c']",
-    wrapType: true,
-  },
-  {
-    name: 'array-random',
-    valueType: 'split',
-    refs: createRef(),
-    custom: '["a","b","c"]|["d","e",0,"f"]|["g","h"]',
-    wrapType: false,
-  },
-  {
-    name: 'enum',
-    valueType: 'split',
-    refs: createRef(),
-    custom: '0|1|2|3|4|5',
-    wrapType: false,
-  },
+  // {
+  //   name: 'name',
+  //   valueType: 'name',
+  //   refs: createRef(),
+  //   custom: '',
+  //   wrapType: true,
+  // },
+  // {
+  //   name: 'phone',
+  //   valueType: 'phone',
+  //   refs: createRef(),
+  //   custom: '',
+  //   wrapType: true,
+  // },
+  // {
+  //   name: 'address',
+  //   valueType: 'address',
+  //   refs: createRef(),
+  //   custom: '',
+  //   wrapType: true,
+  // },
+  // {
+  //   name: 'email',
+  //   valueType: 'email',
+  //   refs: createRef(),
+  //   custom: '',
+  //   wrapType: true,
+  // },
+  // {
+  //   name: 'date',
+  //   valueType: 'date',
+  //   refs: createRef(),
+  //   custom: '',
+  //   wrapType: false,
+  // },
+  // {
+  //   name: 'title',
+  //   valueType: 'title',
+  //   refs: createRef(),
+  //   custom: '',
+  //   wrapType: true,
+  // },
+  // {
+  //   name: 'article',
+  //   valueType: 'article',
+  //   refs: createRef(),
+  //   custom: '',
+  //   wrapType: true,
+  // },
+  // {
+  //   name: 'custom',
+  //   valueType: 'custom',
+  //   refs: createRef(),
+  //   custom: 'customer',
+  //   wrapType: true,
+  // },
+  // {
+  //   name: 'json',
+  //   valueType: 'custom',
+  //   refs: createRef(),
+  //   custom: "['a','b','c']",
+  //   wrapType: true,
+  // },
+  // {
+  //   name: 'array-random',
+  //   valueType: 'split',
+  //   refs: createRef(),
+  //   custom: '["a","b","c"]|["d","e",0,"f"]|["g","h"]',
+  //   wrapType: false,
+  // },
+  // {
+  //   name: 'enum',
+  //   valueType: 'split',
+  //   refs: createRef(),
+  //   custom: '0|1|2|3|4|5',
+  //   wrapType: false,
+  // },
 ] as Array<KeyValueWrap.List>
 const Wrap = () => {
   const codeRef = useRef(null as any)
@@ -159,6 +177,11 @@ const Wrap = () => {
       ].refs.current.focus()
     }
   }, [keyValues.length])
+  useEffect(() => {
+    if (keyValues) {
+      console.log('keyValues', keyValues)
+    }
+  }, [keyValues])
   return (
     <div id="wrap">
       <div className="key-part">
@@ -219,7 +242,11 @@ const Wrap = () => {
                   }}
                   onKeyDown={(e) => handleKeyDownOnSelect(e, index)}
                 >
+                  <option>id</option>
+                  <option>code</option>
                   <option>name</option>
+                  <option>brand</option>
+                  <option>product</option>
                   <option>phone</option>
                   <option>email</option>
                   <option>address</option>
@@ -268,31 +295,40 @@ const Wrap = () => {
               </>
             )}
             {manys.map((_, manyIndex) => {
-              return(
+              return (
                 <React.Fragment key={`code-${manyIndex}`}>
                   {'{'}
                   {keyValues &&
                     keyValues.length > 0 &&
                     keyValues.map((item, index) => {
-                      if(item.valueType === 'date'){
+                      if (item.valueType === 'date') {
                         item.wrapType = false
                       }
-                      return(
+                      return (
                         <React.Fragment key={`code-${index}`}>
                           {'\n'}
                           {`    "${item.name}": ${item.wrapType ? `"` : ``}${
-                            item.valueType === 'name' ? randomName() : ''
-                          }${item.valueType === 'phone' ? randomNumber() : ''}${
+                            item.valueType === 'id' ? uuidv4() : ''
+                          }${
+                            item.valueType === 'product' ? randomProducts() : ''
+                          }${item.valueType === 'brand' ? randomBrands() : ''}${
+                            item.valueType === 'code' ? randomCode() : ''
+                          }${item.valueType === 'name' ? randomName() : ''}${
+                            item.valueType === 'phone' ? randomNumber() : ''
+                          }${
                             item.valueType === 'split'
                               ? item.custom?.includes('|')
                                 ? randomRange(item.custom.split('|'))
                                 : item.custom
                               : ''
-                          }${item.valueType === 'address' ? randomAddress() : ''}${
-                            item.valueType === 'email' ? randomMail() : ''
                           }${
+                            item.valueType === 'address' ? randomAddress() : ''
+                          }${item.valueType === 'email' ? randomMail() : ''}${
                             item.valueType === 'date'
-                              ? randomDate(new Date(2012, 0, 1), new Date()).getTime()
+                              ? randomDate(
+                                  new Date(2012, 0, 1),
+                                  new Date()
+                                ).getTime()
                               : ''
                           }${item.valueType === 'title' ? randomTitle() : ''}${
                             item.valueType === 'article' ? randomArticle() : ''

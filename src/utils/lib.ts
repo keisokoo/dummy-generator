@@ -8,6 +8,8 @@ import {
   numberRange,
   titles,
   articles,
+  brands,
+  prodname,
 } from './data'
 
 export function randomRange(arr: Array<any>) {
@@ -39,6 +41,12 @@ export const randomAddress = () => {
 export function randomName() {
   return randomRange(firstNames) + randomRange(lastNames)
 }
+export function randomProducts() {
+  return randomRange(prodname)
+}
+export function randomBrands() {
+  return randomRange(brands)
+}
 
 export function randomMail() {
   return (
@@ -56,6 +64,12 @@ export function randomMail() {
       gcr()
     ).toLowerCase() + randomRange(mails)
   )
+}
+const randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+export const randomCode = () => {
+  return `${randomRange(randomChars)}${randomRange(numberRange)}${randomRange(
+    numberRange
+  )}${randomRange(numberRange)}${randomRange(numberRange)}`
 }
 export const randomNumber = () => {
   return `010-${randomRange(numberRange)}${randomRange(
