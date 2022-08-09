@@ -1,21 +1,20 @@
-import React, { createRef, useState, useEffect, useMemo, useRef } from 'react'
-import { KeyValueWrap } from 'custom-types'
+import React, { createRef, useEffect, useMemo, useRef, useState } from 'react'
 import Textinput from '../themes/textinput'
-import {
-  randomDate,
-  randomName,
-  randomNumber,
-  randomAddress,
-  randomMail,
-  randomTitle,
-  randomArticle,
-  randomRange,
-  randomCode,
-  randomBrands,
-  randomProducts,
-} from '../utils/lib'
+import { disposeByType } from '../utils/lib'
 // import { format } from 'date-fns'
-import { v4 as uuidv4 } from 'uuid'
+import {
+  isValueTypes,
+  ValueTypeList,
+  ValueTypes,
+} from '../../@types/custom-types'
+
+export interface KeyValueWrap {
+  name: string
+  valueType: ValueTypes
+  refs: React.MutableRefObject<any>
+  custom: string
+  wrapType: boolean
+}
 
 const initialKeyValue = [
   {
@@ -109,13 +108,13 @@ const initialKeyValue = [
   //   custom: '0|1|2|3|4|5',
   //   wrapType: false,
   // },
-] as Array<KeyValueWrap.List>
+] as Array<KeyValueWrap>
 const Wrap = () => {
   const codeRef = useRef(null as any)
   const [keyValues, setKeyValues] = useState(initialKeyValue)
   const [valueName, setValueName] = useState('example')
   const [count, setCount] = useState(3)
-  const manys = useMemo(() => new Array(count).fill(1), [count])
+  const manyOf = useMemo(() => new Array(count).fill(1), [count])
   const handleCustom = (value: string, index: number): void => {
     setKeyValues((prev) => [
       ...prev.slice(0, index),
@@ -138,7 +137,7 @@ const Wrap = () => {
         { ...prev[index] },
         {
           name: '',
-          valueType: '',
+          valueType: 'index',
           refs: createRef(),
           custom: '',
           wrapType: true,
@@ -154,7 +153,7 @@ const Wrap = () => {
         { ...prev[index] },
         {
           name: '',
-          valueType: '',
+          valueType: 'index',
           refs: createRef(),
           custom: '',
           wrapType: true,
@@ -171,10 +170,10 @@ const Wrap = () => {
     }
   }
   useEffect(() => {
-    if (keyValues.findIndex((dt) => dt.name === '') > 0) {
-      keyValues[
-        keyValues.findIndex((dt) => dt.name === '')
-      ].refs.current.focus()
+    let findResult = keyValues.findIndex((dt) => dt.name === '')
+    let findTarget = keyValues[findResult]
+    if (findResult && findTarget) {
+      findTarget.refs.current.focus()
     }
   }, [keyValues.length])
   useEffect(() => {
@@ -202,7 +201,7 @@ const Wrap = () => {
             />
             <Textinput
               defaultValue={valueName}
-              onValueChange={(value) => setValueName(value)}
+              onValueChange={(value: string) => setValueName(value)}
             />
             <button
               onClick={() => {
@@ -228,33 +227,34 @@ const Wrap = () => {
                   index={index}
                   refs={item.refs}
                   defaultValue={item.name}
-                  onValueChange={(value) => handleSetKey(value, index)}
-                  onKeyDown={handleKeyDown}
+                  onValueChange={(value: string) => handleSetKey(value, index)}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
                 />
                 <select
                   value={item.valueType}
                   onChange={(e) => {
-                    setKeyValues((prev) => [
-                      ...prev.slice(0, index),
-                      { ...prev[index], valueType: e.target.value },
-                      ...prev.slice(index + 1),
-                    ])
+                    setKeyValues((prev) => {
+                      let changeType = e.target.value
+                      if (isValueTypes(changeType)) {
+                        return [
+                          ...prev.slice(0, index),
+                          { ...prev[index], valueType: changeType },
+                          ...prev.slice(index + 1),
+                        ]
+                      } else {
+                        return prev
+                      }
+                    })
                   }}
                   onKeyDown={(e) => handleKeyDownOnSelect(e, index)}
                 >
-                  <option>id</option>
-                  <option>code</option>
-                  <option>name</option>
-                  <option>brand</option>
-                  <option>product</option>
-                  <option>phone</option>
-                  <option>email</option>
-                  <option>address</option>
-                  <option>date</option>
-                  <option>title</option>
-                  <option>article</option>
-                  <option value={'split'}>split("|")</option>
-                  <option>custom</option>
+                  {ValueTypeList.map((item) => {
+                    return (
+                      <option value={item} key={item}>
+                        {item}
+                      </option>
+                    )
+                  })}
                 </select>
 
                 {(item.valueType === 'custom' ||
@@ -278,7 +278,9 @@ const Wrap = () => {
                     </select>
                     <Textinput
                       defaultValue={item.custom}
-                      onValueChange={(value) => handleCustom(value, index)}
+                      onValueChange={(value: string) =>
+                        handleCustom(value, index)
+                      }
                     />
                   </>
                 )}
@@ -291,10 +293,10 @@ const Wrap = () => {
           <code ref={codeRef}>
             {valueName && (
               <>
-                const {valueName} = {manys.length > 1 ? <>[{'\n'}</> : ''}
+                const {valueName} = {manyOf.length > 1 ? <>[{'\n'}</> : ''}
               </>
             )}
-            {manys.map((_, manyIndex) => {
+            {manyOf.map((_, manyIndex) => {
               return (
                 <React.Fragment key={`code-${manyIndex}`}>
                   {'{'}
@@ -307,40 +309,24 @@ const Wrap = () => {
                       return (
                         <React.Fragment key={`code-${index}`}>
                           {'\n'}
-                          {`    "${item.name}": ${item.wrapType ? `"` : ``}${
-                            item.valueType === 'id' ? uuidv4() : ''
-                          }${
-                            item.valueType === 'product' ? randomProducts() : ''
-                          }${item.valueType === 'brand' ? randomBrands() : ''}${
-                            item.valueType === 'code' ? randomCode() : ''
-                          }${item.valueType === 'name' ? randomName() : ''}${
-                            item.valueType === 'phone' ? randomNumber() : ''
-                          }${
-                            item.valueType === 'split'
-                              ? item.custom?.includes('|')
-                                ? randomRange(item.custom.split('|'))
-                                : item.custom
-                              : ''
-                          }${
-                            item.valueType === 'address' ? randomAddress() : ''
-                          }${item.valueType === 'email' ? randomMail() : ''}${
-                            item.valueType === 'date'
-                              ? randomDate(
-                                  new Date(2012, 0, 1),
-                                  new Date()
-                                ).getTime()
-                              : ''
-                          }${item.valueType === 'title' ? randomTitle() : ''}${
-                            item.valueType === 'article' ? randomArticle() : ''
-                          }${item.valueType === 'custom' ? item.custom : ''}${
-                            item.wrapType ? `"` : ``
+                          {`    "${item.name}": ${
+                            item.wrapType && item.valueType !== 'index'
+                              ? `"`
+                              : ``
+                          }${disposeByType(
+                            item.valueType,
+                            item.valueType === 'index' ? manyIndex : item.custom
+                          )}${
+                            item.wrapType && item.valueType !== 'index'
+                              ? `"`
+                              : ``
                           },`}
                         </React.Fragment>
                       )
                     })}
                   {'\n'}
                   {'}'}
-                  {manys.length > 1 && manys.length - 1 !== manyIndex ? (
+                  {manyOf.length > 1 && manyOf.length - 1 !== manyIndex ? (
                     <>,{'\n'}</>
                   ) : (
                     ''
@@ -348,7 +334,7 @@ const Wrap = () => {
                 </React.Fragment>
               )
             })}
-            {manys.length > 1 ? <>]{'\n'}</> : ''}
+            {manyOf.length > 1 ? <>]{'\n'}</> : ''}
           </code>
         </div>
       </div>

@@ -1,15 +1,17 @@
+import { v4 as uuidv4 } from 'uuid'
+import { ValueTypes } from '../../@types/custom-types'
 import {
-  rand,
   address,
-  middle,
+  articles,
+  brands,
   firstNames,
   lastNames,
   mails,
+  middle,
   numberRange,
-  titles,
-  articles,
-  brands,
   prodname,
+  rand,
+  titles,
 } from './data'
 
 export function randomRange(arr: Array<any>) {
@@ -85,4 +87,31 @@ export function randomTitle() {
 }
 export function randomArticle() {
   return randomRange(articles)
+}
+
+export const extractByType = {
+  id: uuidv4,
+  product: randomProducts,
+  brand: randomBrands,
+  code: randomCode,
+  name: randomName,
+  phone: randomNumber,
+  split: (custom?: string) => {
+    return custom
+      ? custom.includes('|')
+        ? randomRange(custom.split('|'))
+        : custom
+      : ''
+  },
+  address: randomAddress,
+  email: randomMail,
+  date: () => randomDate(new Date(2020, 0, 1), new Date()).getTime(),
+  title: randomTitle,
+  article: randomArticle,
+  custom: (custom: string) => custom,
+  index: (num: number) => Number(num),
+} as { [key in ValueTypes]: (value?: string | number) => string | number }
+
+export const disposeByType = (keyName: ValueTypes, value?: string | number) => {
+  return extractByType[keyName](value)
 }

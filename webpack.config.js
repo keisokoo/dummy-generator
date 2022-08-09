@@ -17,7 +17,7 @@ module.exports = {
     open: true,
     contentBase: path.resolve('./build'),
     index: 'index.html',
-    port: 5000,
+    port: 5005,
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.css', '.scss', '.json'],

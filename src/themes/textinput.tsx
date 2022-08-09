@@ -1,7 +1,19 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
-import styles from './textinput.module.scss'
-import { TextInputType } from 'custom-types'
+import React, {
+  ChangeEvent,
+  KeyboardEventHandler,
+  useEffect,
+  useState,
+} from 'react'
 
+import styles from './textinput.module.scss'
+export interface TextInputTypeProps {
+  index?: number
+  refs?: React.MutableRefObject<any> | undefined | null
+  defaultValue?: string | undefined
+  onValueChange?: (value: string) => void
+  onKeyDown?: KeyboardEventHandler<HTMLInputElement> | undefined
+  inputType?: string
+}
 const TextInput = ({
   index,
   refs,
@@ -9,7 +21,7 @@ const TextInput = ({
   defaultValue,
   onKeyDown,
   inputType,
-}: TextInputType.Props) => {
+}: TextInputTypeProps) => {
   const [value, setValue] = useState('' as string | undefined)
   const handleChangeValue = (event: ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value)
@@ -32,7 +44,7 @@ const TextInput = ({
         type={inputType ? inputType : `text`}
         value={value}
         onChange={handleChangeValue}
-        {...(onKeyDown && { onKeyDown: (e) => onKeyDown(e, index) })}
+        {...(onKeyDown && { onKeyDown: (e) => onKeyDown(e) })}
       />
     </div>
   )
