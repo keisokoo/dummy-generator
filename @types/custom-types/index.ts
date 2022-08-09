@@ -2,7 +2,6 @@ export const ValueTypeList = [
   'id',
   'product',
   'brand',
-  'code',
   'name',
   'phone',
   'split',

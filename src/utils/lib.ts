@@ -86,7 +86,7 @@ export function randomTitle() {
   return randomRange(titles)
 }
 export function randomArticle() {
-  return randomRange(articles)
+  return randomRange(articles).replaceAll('"', '')
 }
 
 export const extractByType = {

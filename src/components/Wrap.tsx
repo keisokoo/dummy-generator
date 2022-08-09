@@ -114,7 +114,7 @@ const Wrap = () => {
   const [keyValues, setKeyValues] = useState(initialKeyValue)
   const [valueName, setValueName] = useState('example')
   const [count, setCount] = useState(3)
-  const manyOf = useMemo(() => new Array(count).fill(1), [count])
+  const manyOf = useMemo(() => Array.from(Array(count).keys()), [count])
   const handleCustom = (value: string, index: number): void => {
     setKeyValues((prev) => [
       ...prev.slice(0, index),
@@ -250,7 +250,7 @@ const Wrap = () => {
                 >
                   {ValueTypeList.map((item) => {
                     return (
-                      <option value={item} key={item}>
+                      <option value={item} key={`option${item}`}>
                         {item}
                       </option>
                     )
@@ -298,7 +298,7 @@ const Wrap = () => {
             )}
             {manyOf.map((_, manyIndex) => {
               return (
-                <React.Fragment key={`code-${manyIndex}`}>
+                <React.Fragment key={`code-1-${manyIndex}`}>
                   {'{'}
                   {keyValues &&
                     keyValues.length > 0 &&
@@ -307,7 +307,7 @@ const Wrap = () => {
                         item.wrapType = false
                       }
                       return (
-                        <React.Fragment key={`code-${index}`}>
+                        <React.Fragment key={`code-2-${manyIndex}${index}`}>
                           {'\n'}
                           {`    "${item.name}": ${
                             item.wrapType && item.valueType !== 'index'
