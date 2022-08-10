@@ -84,9 +84,13 @@ export const randomNumber = () => {
 }
 export function randomTitle() {
   return randomRange(titles)
+    .replaceAll('"', '')
+    .replace(/[\n\r]/g, ' ')
 }
 export function randomArticle() {
-  return randomRange(articles).replaceAll('"', '')
+  return randomRange(articles)
+    .replaceAll('"', '')
+    .replace(/[\n\r]/g, ' ')
 }
 
 export const extractByType = {
@@ -109,7 +113,7 @@ export const extractByType = {
   title: randomTitle,
   article: randomArticle,
   custom: (custom: string) => custom,
-  index: (num: number) => Number(num),
+  index: (num: number) => Number(num) + 1,
 } as { [key in ValueTypes]: (value?: string | number) => string | number }
 
 export const disposeByType = (keyName: ValueTypes, value?: string | number) => {
